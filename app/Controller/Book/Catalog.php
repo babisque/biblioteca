@@ -2,10 +2,11 @@
 
 namespace App\Library\Controller\Book;
 
+use App\Library\Controller\ControllerHtml;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
 
-class Catalog
+class Catalog extends ControllerHtml
 {
     public function request(): void
     {
@@ -14,7 +15,9 @@ class Catalog
 
         $bookList = $bookRepository->read();
 
-        $title = "Catálogo";
-        require __DIR__ . '/../../../view/livros/catalog.php';
+        echo $this->htmlRender('livros/catalog.php', [
+            'bookList' => $bookRepository->read(),
+            'title' => "Catálogo"
+        ]);
     }
 }

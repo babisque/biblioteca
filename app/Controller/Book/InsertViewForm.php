@@ -2,11 +2,14 @@
 
 namespace App\Library\Controller\Book;
 
-class InsertViewForm
+use App\Library\Controller\ControllerHtml;
+
+class InsertViewForm extends ControllerHtml
 {
     public function request()
     {
-        $title = "Inserir novo livro";
-        require __DIR__ . '/../../../view/livros/form.php';
+        echo $this->htmlRender('livros/form.php', [
+            'title' => 'Inserir novo livro',
+        ]);
     }
 }

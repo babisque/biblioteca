@@ -2,10 +2,11 @@
 
 namespace App\Library\Controller\Book;
 
+use App\Library\Controller\ControllerHtml;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
 
-class EditViewForm
+class EditViewForm extends ControllerHtml
 {
     public function request()
     {
@@ -24,7 +25,9 @@ class EditViewForm
             $book = $bookId;
         }
 
-        $title = "Editar livro " . $book->getTitle();
-        require __DIR__ . '/../../../view/livros/form.php';
+        echo $this->htmlRender('livros/form.php', [
+            'book' => $book,
+            'title' => "Editar livro " . $book->getTitle(),
+        ]);
     }
 }

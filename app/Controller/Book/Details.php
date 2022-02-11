@@ -2,10 +2,11 @@
 
 namespace App\Library\Controller\Book;
 
+use App\Library\Controller\ControllerHtml;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
 
-class Details
+class Details extends ControllerHtml
 {
     public function request(): void
     {
@@ -19,7 +20,9 @@ class Details
             $book = $books;
         }
 
-        $title = $book->getTitle() . ' - Detalhes';
-        require __DIR__ . '/../../../view/livros/details.php';
+        echo $this->htmlRender('livros/details.php', [
+            'book' => $book,
+            'title' => $title = $book->getTitle() . ' - Detalhes'
+        ]);
     }
 }
