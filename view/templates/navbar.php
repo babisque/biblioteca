@@ -19,3 +19,13 @@
     <a href="/logout" class="btn btn-outline-danger me-3">Logout</a>
     <?php endif; ?>
 </nav>
+
+<?php if (isset($_SESSION['message'])): ?>
+<div class="alert alert-<?= $_SESSION['message_type']; ?> mt-4 mx-4">
+    <?= $_SESSION['message']; ?>
+</div>
+<?php
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+    endif;
+    ?>

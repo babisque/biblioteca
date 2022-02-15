@@ -27,7 +27,7 @@ class UserRepository
         return $success;
     }
 
-    public function findUser(string $email): array
+    public function findUser(string $email)
     {
         $query = "SELECT * FROM user WHERE email = ?;";
         $statement = $this->connection->prepare($query);

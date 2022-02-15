@@ -2,12 +2,14 @@
 
 namespace App\Library\Controller\Book;
 
-use App\Library\Controller\ControllerHtml;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
+use App\Library\Service\HtmlRenderTrait;
 
-class Details extends ControllerHtml
+class Details
 {
+    use HtmlRenderTrait;
+
     public function request(): void
     {
         $connection = ConnectionCreator::creatorConnection();

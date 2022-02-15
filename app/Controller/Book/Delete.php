@@ -5,9 +5,12 @@ namespace App\Library\Controller\Book;
 use App\Library\Entity\Book;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
+use App\Library\Service\FlashMessageTrait;
 
 class Delete
 {
+    use FlashMessageTrait;
+
     public function request()
     {
         if (!isset($_SESSION['loggedin'])) {
@@ -25,6 +28,8 @@ class Delete
         try {
             $bookRepository->delete($id);
             $connection->commit();
+
+            $this->messageDefine('danger', 'Livro excluído com sucesso.');
 
             header('Location: /', true, 302);
         } catch (\PDOException $e) {
