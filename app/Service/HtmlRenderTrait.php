@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Library\Controller;
+namespace App\Library\Service;
 
-class ControllerHtml
+trait HtmlRenderTrait
 {
     public function htmlRender(string $templatePath, array $data): string
     {

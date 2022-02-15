@@ -2,14 +2,21 @@
 
 namespace App\Library\Controller\Book;
 
-use App\Library\Controller\ControllerHtml;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
+use App\Library\Service\HtmlRenderTrait;
 
-class EditViewForm extends ControllerHtml
+class EditViewForm
 {
+    use HtmlRenderTrait;
+
     public function request()
     {
+        if (!isset($_SESSION['loggedin'])) {
+            header('Location: /login');
+            return;
+        }
+
         $connection = ConnectionCreator::creatorConnection();
         $bookRepository = new BookRepository($connection);
 

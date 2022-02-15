@@ -10,6 +10,11 @@ class Delete
 {
     public function request()
     {
+        if (!isset($_SESSION['loggedin'])) {
+            header('Location: /login');
+            return;
+        }
+
         $connection = ConnectionCreator::creatorConnection();
         $bookRepository = new BookRepository($connection);
 

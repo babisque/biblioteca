@@ -10,6 +10,14 @@ if (!array_key_exists($path, $routes)) {
     exit();
 }
 
+session_start();
+
+/*$loginRoute = stripos($path, 'login');
+if (!isset($_SESSION['loggedin']) && $loginRoute === false && $path = '') {
+    header('Location: /login');
+    exit();
+}*/
+
 $controllerClass = $routes[$path];
 $controller = new $controllerClass;
 $controller->request();

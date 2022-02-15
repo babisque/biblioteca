@@ -26,9 +26,9 @@ class BookRepository
     public function create(Book $book): bool
     {
         $insertQuery = "INSERT INTO books (title, author, date, company, image, synopsis) VALUES (:title, :author, :date_release, :company, :image, :synopsis);";
-        $statemen = $this->connection->prepare($insertQuery);
+        $statement = $this->connection->prepare($insertQuery);
 
-        $success = $statemen->execute([
+        $success = $statement->execute([
             ':title' => $book->getTitle(),
             ':author' => $book->getAuthor(),
             ':date_release' => $book->getDate()->format('Y-m-d'),
