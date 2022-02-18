@@ -6,19 +6,33 @@ use App\Library\Entity\Book;
 use App\Library\Repository\BookRepository;
 use App\Library\Service\ConnectionCreator;
 use App\Library\Service\FlashMessageTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class InsertForm
+class InsertForm implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
-    public function request()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (!isset($_SESSION['loggedin'])) {
+            return new Response(302, ['Location' => '/login']);
+        }
+
         $connection = ConnectionCreator::creatorConnection();
         $bookRepository = new BookRepository($connection);
 
         $connection->beginTransaction();
 
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $queryString = $request->getQueryParams();
+
+        if (isset($queryString['id'])) {
+            $id = filter_var($request->getQueryParams()['id'], FILTER_VALIDATE_INT);
+        } else {
+            $id = null;
+        }
 
         try {
             $book = new Book(
@@ -40,10 +54,11 @@ class InsertForm
                 $this->messageDefine('success', 'Livro inserido com sucesso.');
             }
 
-            header('Location: /', true, 302);
+            return new Response(302, ['Location' => '/']);
         } catch (\PDOException $e) {
             echo $e->getMessage();
             $connection->rollBack();
+            return new Response(404);
         }
     }
 }

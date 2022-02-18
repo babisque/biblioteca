@@ -16,7 +16,7 @@ class BookRepository
 
     public function save(Book $book): bool
     {
-        if ($book->getId() === null) {
+        if (is_null($book->getId())) {
             return $this->create($book);
         }
 

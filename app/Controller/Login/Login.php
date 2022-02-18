@@ -6,23 +6,26 @@ use App\Library\Entity\User;
 use App\Library\Repository\UserRepository;
 use App\Library\Service\ConnectionCreator;
 use App\Library\Service\FlashMessageTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class Login
+class Login implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
-    public function request()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $connection = ConnectionCreator::creatorConnection();
         $userRepository = new UserRepository($connection);
 
-        $email = filter_input(INPUT_POST, 'emailLogin', FILTER_VALIDATE_EMAIL);
-        $password = $_POST['passwordLogin'];
+        $email = filter_var($request->getParsedBody()['emailLogin'], FILTER_VALIDATE_EMAIL);
+        $password = $request->getParsedBody()['passwordLogin'];
 
         if (is_null($email) || $email === false) {
             $this->messageDefine('danger', 'E-mail incorreto.');
-            header('Location: /login');
-            return;
+            return new Response(401, ['Location' => '/login']);
         }
 
         /** @var User $user */
@@ -30,12 +33,11 @@ class Login
 
         if (!password_verify($password, $user['password'])) {
             $this->messageDefine('danger', 'Email ou senha incorretas');
-            header('Location: /login');
-            return;
+            return new Response(401, ['Location' => '/login']);
         }
 
         $_SESSION['loggedin'] = true;
 
-        header('Location: /');
+        return new Response(302, ['Location' => '/']);
     }
 }
